@@ -268,7 +268,7 @@ The RevWorkForce HRM system uses an **Oracle Database** hosted on **FreeSQLDatab
 # File: src/main/resources/application.properties
 spring.datasource.url=jdbc:oracle:thin:@//db.freesql.com:1521/26ai_un3c1
 spring.datasource.username=PRAKASHTUSHRA924_SCHEMA_3S765
-spring.datasource.password=ZYL4IZ736H1YHG6u5!0O1BUFTZ55Y7
+spring.datasource.password=###########################
 spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
 ```
 
