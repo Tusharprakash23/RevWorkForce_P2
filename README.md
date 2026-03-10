@@ -62,7 +62,7 @@ Edit `src/main/resources/application.properties` to ensure the Oracle JDBC field
 ```properties
 spring.datasource.url=jdbc:oracle:thin:@//localhost:1521/ORCLPDB
 spring.datasource.username=REVWORKFORCE_WEB
-spring.datasource.password=rev123
+spring.datasource.password=########
 ```
 
 ### 3. Build & Run
@@ -115,3 +115,4 @@ RevWorkforce/
 
 ---
 *Developed with Java 17 and Spring Boot 3.*
+
