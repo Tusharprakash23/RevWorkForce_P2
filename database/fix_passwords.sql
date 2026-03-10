@@ -1,26 +1,28 @@
 -- ============================================================
 -- Fix User Passwords - Run this on FreeSQLDatabase.com
--- The original BCrypt hashes were incorrect placeholders.
--- These are the CORRECT hashes for the stated passwords.
+-- Updates passwords from BCrypt hashes to plain text
 -- ============================================================
 
 -- Admin: admin123
-UPDATE users SET password = '$2a$10$QSnHurm1WVhUwKgagbH9m.FurStndJ3dbb4WZGRVBVw1l/0KM4jZC'
+UPDATE users SET password = 'admin123'
 WHERE email = 'admin@revworkforce.com';
 
 -- Manager: manager123
-UPDATE users SET password = '$2a$10$Gm9DsKCFXtVlOZLA0IUM2uJCYsYJOp2H7ePdv27KaNzUlvcveD2ay'
+UPDATE users SET password = 'manager123'
 WHERE email = 'manager@revworkforce.com';
 
--- Employees: employee123
-UPDATE users SET password = '$2a$10$ozcV4fgBLXmBpQFNbrjfP.XIsZb5dL7obGUeNAXaxAsiOEDj9zk3q'
+-- Employees
+UPDATE users SET password = 'employee123'
 WHERE email = 'employee@revworkforce.com';
 
-UPDATE users SET password = '$2a$10$ozcV4fgBLXmBpQFNbrjfP.XIsZb5dL7obGUeNAXaxAsiOEDj9zk3q'
-WHERE email = 'amit@revworkforce.com';
+UPDATE users SET password = 'jane123'
+WHERE email = 'jane@revworkforce.com';
 
-UPDATE users SET password = '$2a$10$ozcV4fgBLXmBpQFNbrjfP.XIsZb5dL7obGUeNAXaxAsiOEDj9zk3q'
-WHERE email = 'sneha@revworkforce.com';
+UPDATE users SET password = '123456'
+WHERE email = 'abc@gmail.com';
+
+UPDATE users SET password = '123456'
+WHERE email = 'tushar@gmail.com';
 
 COMMIT;
 

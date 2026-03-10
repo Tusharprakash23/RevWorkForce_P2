@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -24,14 +24,25 @@ public class DataInitializer implements CommandLineRunner {
     private final LeaveBalanceDao leaveBalanceDao;
     private final HolidayDao holidayDao;
     private final AnnouncementDao announcementDao;
-    private final PasswordEncoder passwordEncoder;
+
 
     @Override
     public void run(String... args) {
         try {
             Long userCount = jdbcTemplate.queryForObject("SELECT COUNT(*) FROM users", Long.class);
             if (userCount != null && userCount > 0) {
-                log.info("Data already seeded. Skipping initialization.");
+                log.info("Data already seeded. Checking for password migration...");
+                // Migrate BCrypt hashed passwords to plain text
+                try {
+                    jdbcTemplate.update("UPDATE users SET password = 'admin123' WHERE email = 'admin@revworkforce.com' AND password LIKE '$2a$%'");
+                    jdbcTemplate.update("UPDATE users SET password = 'manager123' WHERE email = 'manager@revworkforce.com' AND password LIKE '$2a$%'");
+                    jdbcTemplate.update("UPDATE users SET password = 'employee123' WHERE email = 'employee@revworkforce.com' AND password LIKE '$2a$%'");
+                    jdbcTemplate.update("UPDATE users SET password = 'jane123' WHERE email = 'jane@revworkforce.com' AND password LIKE '$2a$%'");
+                    jdbcTemplate.update("UPDATE users SET password = 'bob123' WHERE email = 'bob@revworkforce.com' AND password LIKE '$2a$%'");
+                    log.info("Password migration completed.");
+                } catch (Exception ex) {
+                    log.warn("Password migration skipped: " + ex.getMessage());
+                }
                 return;
             }
         } catch (Exception e) {
@@ -64,7 +75,7 @@ public class DataInitializer implements CommandLineRunner {
             if (userDao.findAll().isEmpty()) {
                 User admin = User.builder()
                         .name("Admin User").email("admin@revworkforce.com")
-                        .password(passwordEncoder.encode("admin123"))
+                        .password("admin123")
                         .employeeId("EMP00001").role(User.Role.ADMIN)
                         .department("Human Resources").designation("HR Director")
                         .phone("9876543210").joiningDate(LocalDate.of(2023, 1, 1))
@@ -73,7 +84,7 @@ public class DataInitializer implements CommandLineRunner {
 
                 User manager = User.builder()
                         .name("Manager User").email("manager@revworkforce.com")
-                        .password(passwordEncoder.encode("manager123"))
+                        .password("manager123")
                         .employeeId("EMP00002").role(User.Role.MANAGER)
                         .department("Engineering").designation("Engineering Manager")
                         .phone("9876543211").joiningDate(LocalDate.of(2023, 3, 15))
@@ -82,7 +93,7 @@ public class DataInitializer implements CommandLineRunner {
 
                 User employee1 = User.builder()
                         .name("John Employee").email("employee@revworkforce.com")
-                        .password(passwordEncoder.encode("employee123"))
+                        .password("employee123")
                         .employeeId("EMP00003").role(User.Role.EMPLOYEE)
                         .department("Engineering").designation("Software Developer")
                         .phone("9876543212").joiningDate(LocalDate.of(2023, 6, 1))
@@ -91,7 +102,7 @@ public class DataInitializer implements CommandLineRunner {
 
                 User employee2 = User.builder()
                         .name("Jane Developer").email("jane@revworkforce.com")
-                        .password(passwordEncoder.encode("jane123"))
+                        .password("jane123")
                         .employeeId("EMP00004").role(User.Role.EMPLOYEE)
                         .department("Engineering").designation("Senior Developer")
                         .phone("9876543213").joiningDate(LocalDate.of(2023, 8, 10))
@@ -100,7 +111,7 @@ public class DataInitializer implements CommandLineRunner {
 
                 User employee3 = User.builder()
                         .name("Bob Analyst").email("bob@revworkforce.com")
-                        .password(passwordEncoder.encode("bob123"))
+                        .password("bob123")
                         .employeeId("EMP00005").role(User.Role.EMPLOYEE)
                         .department("Marketing").designation("Marketing Analyst")
                         .phone("9876543214").joiningDate(LocalDate.of(2024, 1, 15))

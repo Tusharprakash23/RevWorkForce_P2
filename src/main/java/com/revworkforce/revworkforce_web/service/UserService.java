@@ -3,7 +3,7 @@ package com.revworkforce.revworkforce_web.service;
 import com.revworkforce.revworkforce_web.dao.*;
 import com.revworkforce.revworkforce_web.model.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -16,13 +16,13 @@ public class UserService {
     private final UserDao userDao;
     private final LeaveBalanceDao leaveBalanceDao;
     private final LeaveTypeDao leaveTypeDao;
-    private final PasswordEncoder passwordEncoder;
+
 
     public User register(User user) {
         if (userDao.existsByEmail(user.getEmail())) {
             throw new RuntimeException("Email already registered");
         }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        // Store password as plain text
         user.setActive(true);
         if (user.getJoiningDate() == null) {
             user.setJoiningDate(LocalDate.now());
@@ -52,7 +52,7 @@ public class UserService {
 
     public Optional<User> authenticate(String email, String password) {
         Optional<User> userOpt = userDao.findByEmail(email);
-        if (userOpt.isPresent() && passwordEncoder.matches(password, userOpt.get().getPassword())) {
+        if (userOpt.isPresent() && password.equals(userOpt.get().getPassword())) {
             if (!userOpt.get().isActive()) {
                 throw new RuntimeException("Account is deactivated");
             }
